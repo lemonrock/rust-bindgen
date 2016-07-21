@@ -36,6 +36,7 @@ use clang_sys::support::Clang;
 mod types;
 mod clang;
 mod gen;
+mod hacks;
 mod parser;
 
 /// A builder to generate bindings.
