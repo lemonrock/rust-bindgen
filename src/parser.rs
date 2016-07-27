@@ -2,7 +2,7 @@
 
 use std::collections::{HashMap, HashSet};
 use std::collections::hash_map;
-use std::cell::RefCell;
+use hacks::refcell::RefCell;
 use std::ops::Deref;
 use std::rc::Rc;
 

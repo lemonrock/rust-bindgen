@@ -1,6 +1,6 @@
 use std;
 use std::mem;
-use std::cell::RefCell;
+use hacks::refcell::RefCell;
 use std::vec::Vec;
 use std::rc::Rc;
 use std::collections::HashMap;
