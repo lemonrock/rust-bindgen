@@ -1,5 +1,5 @@
-use support::assert_bind_eq;
 use bindgen;
+use support::assert_bind_eq;
 
 #[test]
 fn unsigned() {
@@ -35,10 +35,24 @@ fn signed() {
 
 #[test]
 fn floats() {
-    assert_bind_eq(Default::default(), "headers/floats.h", "
+    assert_bind_eq(Default::default(),
+                   "headers/floats.h",
+                   "
     extern \"C\" {
         pub static mut f: f32;
         pub static mut d: f64;
     }
+    ");
+}
+
+#[test]
+fn vectors() {
+    assert_bind_eq(Default::default(),
+                   "headers/vectors.h",
+                   "
+    pub type __v4si = [::std::os::raw::c_int; 4usize];
+    pub type __v4sf = [f32; 4usize];
+    pub type __m128i = [::std::os::raw::c_int; 4usize];
+    pub type __v4su = [::std::os::raw::c_uint; 4usize];
     ");
 }

@@ -314,16 +314,10 @@ fn conv_ty(ctx: &mut ClangParserCtx, ty: &cx::Type, cursor: &Cursor) -> il::Type
         CXTypeKind::Typedef |
         CXTypeKind::Unexposed |
         CXTypeKind::Enum => conv_decl_ty(ctx, &ty.declaration()),
-        CXTypeKind::ConstantArray => {
+        CXTypeKind::ConstantArray | CXTypeKind::Vector => {
             TArray(Box::new(conv_ty(ctx, &ty.elem_type(), cursor)),
-                   ty.array_size(),
+                   ty.elem_num(),
                    layout)
-        }
-        CXTypeKind::Vector => {
-            log_err_warn(ctx,
-                         "Vector types are not supported, see https://github.com/crabtw/rust-bindgen/issues/356",
-                         true);
-            TVoid
         }
         CXTypeKind::Int128 | CXTypeKind::UInt128 => {
             log_err_warn(ctx,

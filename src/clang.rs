@@ -201,13 +201,14 @@ impl Type {
         unsafe { Type { x: clang_getPointeeType(self.x) } }
     }
 
-    // array
+    // array, complex or vector
     pub fn elem_type(&self) -> Type {
-        unsafe { Type { x: clang_getArrayElementType(self.x) } }
+        unsafe { Type { x: clang_getElementType(self.x) } }
     }
 
-    pub fn array_size(&self) -> usize {
-        unsafe { clang_getArraySize(self.x) as usize }
+    // array or vector
+    pub fn elem_num(&self) -> usize {
+        unsafe { clang_getNumElements(self.x) as usize }
     }
 
     // typedef
