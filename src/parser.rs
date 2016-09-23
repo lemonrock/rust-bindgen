@@ -137,6 +137,7 @@ fn decl_name(ctx: &mut ClangParserCtx, cursor: &Cursor) -> Global {
                     let vi = Rc::new(RefCell::new(VarInfo::new(spelling, TVoid)));
                     GFunc(vi)
                 }
+
                 _ => GOther,
             };
 
@@ -320,10 +321,15 @@ fn conv_ty(ctx: &mut ClangParserCtx, ty: &cx::Type, cursor: &Cursor) -> il::Type
                    layout)
         }
         CXTypeKind::Int128 | CXTypeKind::UInt128 => {
-            log_err_warn(ctx,
-                         "128-bits integers are not supported, see https://github.com/crabtw/rust-bindgen/issues/355",
-                         true);
-            TVoid
+            let compinfo = Rc::new(RefCell::new(CompInfo::new(cursor.spelling(), CompKind::Struct, vec![
+                CompMember::Field(FieldInfo::new(String::from("hi"),
+                    TInt(if ty.kind() == CXTypeKind::Int128 { ILongLong } else { IULongLong }, Layout::new(8, 8)), None)),
+                CompMember::Field(FieldInfo::new(String::from("lo"), TInt(IULongLong, Layout::new(8, 8)), None)),
+            ], layout)));
+
+            ctx.globals.push(GComp(compinfo.clone()));
+
+            TComp(compinfo)
         }
         _ => {
             let fail = ctx.options.fail_on_unknown_type;

@@ -56,3 +56,31 @@ fn vectors() {
     pub type __v4su = [::std::os::raw::c_uint; 4usize];
     ");
 }
+
+#[test]
+fn i128() {
+    assert_bind_eq(Default::default(),
+                   "headers/i128.h",
+                   "
+    #[repr(C)]
+    #[derive(Copy, Clone)]
+    #[derive(Debug)]
+    pub struct int128 {
+        pub hi: ::std::os::raw::c_longlong,
+        pub lo: ::std::os::raw::c_ulonglong,
+    }
+    impl ::std::default::Default for int128 {
+        fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    }
+    #[repr(C)]
+    #[derive(Copy, Clone)]
+    #[derive(Debug)]
+    pub struct uint128 {
+        pub hi: ::std::os::raw::c_ulonglong,
+        pub lo: ::std::os::raw::c_ulonglong,
+    }
+    impl ::std::default::Default for uint128 {
+        fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    }
+    ");
+}
