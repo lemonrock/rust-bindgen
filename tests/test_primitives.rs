@@ -1,5 +1,5 @@
-use support::assert_bind_eq;
 use bindgen;
+use support::assert_bind_eq;
 
 #[test]
 fn unsigned() {
@@ -35,10 +35,52 @@ fn signed() {
 
 #[test]
 fn floats() {
-    assert_bind_eq(Default::default(), "headers/floats.h", "
+    assert_bind_eq(Default::default(),
+                   "headers/floats.h",
+                   "
     extern \"C\" {
         pub static mut f: f32;
         pub static mut d: f64;
+    }
+    ");
+}
+
+#[test]
+fn vectors() {
+    assert_bind_eq(Default::default(),
+                   "headers/vectors.h",
+                   "
+    pub type __v4si = [::std::os::raw::c_int; 4usize];
+    pub type __v4sf = [f32; 4usize];
+    pub type __m128i = [::std::os::raw::c_int; 4usize];
+    pub type __v4su = [::std::os::raw::c_uint; 4usize];
+    ");
+}
+
+#[test]
+fn i128() {
+    assert_bind_eq(Default::default(),
+                   "headers/i128.h",
+                   "
+    #[repr(C)]
+    #[derive(Copy, Clone)]
+    #[derive(Debug)]
+    pub struct int128 {
+        pub hi: ::std::os::raw::c_longlong,
+        pub lo: ::std::os::raw::c_ulonglong,
+    }
+    impl ::std::default::Default for int128 {
+        fn default() -> Self { unsafe { ::std::mem::zeroed() } }
+    }
+    #[repr(C)]
+    #[derive(Copy, Clone)]
+    #[derive(Debug)]
+    pub struct uint128 {
+        pub hi: ::std::os::raw::c_ulonglong,
+        pub lo: ::std::os::raw::c_ulonglong,
+    }
+    impl ::std::default::Default for uint128 {
+        fn default() -> Self { unsafe { ::std::mem::zeroed() } }
     }
     ");
 }
